@@ -1,8 +1,8 @@
 package api
 
 import (
-	"singo/serializer"
-	"singo/service"
+	"go-ros-fog/serializer"
+	"go-ros-fog/service"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"

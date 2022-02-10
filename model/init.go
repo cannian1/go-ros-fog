@@ -1,9 +1,9 @@
 package model
 
 import (
+	"go-ros-fog/util"
 	"log"
 	"os"
-	"singo/util"
 	"time"
 
 	"gorm.io/driver/mysql"

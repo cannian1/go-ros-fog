@@ -1,8 +1,8 @@
 package main
 
 import (
-	"singo/conf"
-	"singo/server"
+	"go-ros-fog/conf"
+	"go-ros-fog/server"
 )
 
 func main() {

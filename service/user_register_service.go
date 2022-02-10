@@ -1,8 +1,8 @@
 package service
 
 import (
-	"singo/model"
-	"singo/serializer"
+	"go-ros-fog/model"
+	"go-ros-fog/serializer"
 )
 
 // UserRegisterService 管理用户注册服务

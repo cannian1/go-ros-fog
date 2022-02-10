@@ -1,4 +1,4 @@
-module singo
+module go-ros-fog
 
 go 1.16
 

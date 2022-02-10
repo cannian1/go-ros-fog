@@ -1,9 +1,9 @@
 package server
 
 import (
+	"go-ros-fog/api"
+	"go-ros-fog/middleware"
 	"os"
-	"singo/api"
-	"singo/middleware"
 
 	"github.com/gin-gonic/gin"
 )
