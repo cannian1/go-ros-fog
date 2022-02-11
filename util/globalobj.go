@@ -1,9 +1,13 @@
 package util
 
 import (
-	"go-ros-fog/ziface"
 	"encoding/json"
+	"fmt"
+	"go-ros-fog/ziface"
 	"os"
+	"strconv"
+
+	"github.com/joho/godotenv"
 )
 
 // 存储一切有关 tinyZinx 框架的全局参数，供其他模块使用
@@ -29,6 +33,12 @@ var GlobalObject *GlobalObj
 
 // ReloadFromConf 从 tinyZinx.json 加载用于用户自定义的参数
 func (g *GlobalObj) ReloadFromConf() {
+	// 捕获异常
+	defer func ()  {
+		if err := recover();err!=nil {
+			fmt.Println("[GlobalObj]",err)
+		}
+	}()
 	// go 1.16 弃用此包 ioutil.ReadFile()
 	data, err := os.ReadFile("conf/tinyzinx.json")
 	if err != nil {
@@ -39,15 +49,26 @@ func (g *GlobalObj) ReloadFromConf() {
 	if err != nil {
 		panic(err)
 	}
+	
 }
 
 // ReloadFromEnv 从 .env 里加载参数
-func (g *GlobalObj) ReloadFromEnv(){
-	// TODO 还没写
+func (g *GlobalObj) ReloadFromEnv() {
+	t_tcpPort, _ := strconv.Atoi(os.Getenv("TcpPort"))
+	t_maxConn, _ := strconv.Atoi(os.Getenv("MaxConn"))
+	t_HeartbeatInterval, _ := strconv.Atoi(os.Getenv("HeartbeatInterval"))
+	GlobalObject.Name = os.Getenv("Name")
+	GlobalObject.Host = os.Getenv("Host")
+	GlobalObject.TcpPort = t_tcpPort
+	GlobalObject.Version = "V0.12"
+	GlobalObject.MaxConn = t_maxConn
+	GlobalObject.HeartbeatInterval = t_HeartbeatInterval
 }
 
 // 初始化当前的 GlobalObject
 func init() {
+	// 从本地读取环境变量
+	godotenv.Load()
 	// 如果配置文件没有加载，默认的值
 	GlobalObject = &GlobalObj{
 		Name:              "tinyZinxServerApp",
@@ -62,5 +83,8 @@ func init() {
 	}
 
 	// 尝试从 conf/tinyzinx.json去加载一些用户自定义的参数
-	GlobalObject.ReloadFromConf()
+	// GlobalObject.ReloadFromConf()
+
+	// 尝试从 .env 加载一些用户自定义的参数
+	GlobalObject.ReloadFromEnv()
 }
