@@ -2,6 +2,7 @@ package handle_tcp
 
 import (
 	"fmt"
+	"go-ros-fog/cache"
 	"go-ros-fog/model"
 	"go-ros-fog/ziface"
 	"go-ros-fog/znet"
@@ -77,24 +78,49 @@ func (sr *ServoRouter) Handle(request ziface.IRequest) {
 func DoConnectionBegin(conn ziface.IConnection) {
 	// 将当前连接的ID输出
 	fmt.Println(conn.GetConnID())
-
-	// TODO  在redis中自增连接数
+	
+	// 在redis中自增连接数
+	// tcp_conn:count
+	err := cache.RedisClient.Incr(cache.TCPConnCount).Err()
+	if err != nil {
+		panic(err)
+	}
 
 	// 设置一些连接属性
 	fmt.Println("Set Conn property")
-	conn.SetProperty("Name", "GO-ROS-FOG")
+	conn.SetProperty("ServiceType", "TCP_SCM")
 	conn.SetProperty("Description", "earth")
+
+	// 获取连接属性
+	if serviceType, err := conn.GetProperty("ServiceType"); err == nil {
+		// 在redis中 自增连接类型与连接数
+		// tcp_conn:service_type:TCP_SCM
+		err = cache.RedisClient.Incr(fmt.Sprintf("%s:%s", cache.TCPConnServiceType, serviceType)).Err()
+		if err != nil {
+			panic(err)
+		}
+	}
 }
 
 // DoConnectionLost 连接断开之前需要执行的函数
 func DoConnectionLost(conn ziface.IConnection) {
-
 	fmt.Println("conn ID = ", conn.GetConnID(), " is Lost..")
-	// TODO 在redis中自减连接数
+
+	// 在redis中自减连接数
+	err := cache.RedisClient.Decr(cache.TCPConnCount).Err()
+	if err != nil {
+		fmt.Println("remove TCPConnCount err", err)
+	}
 
 	// 获取连接属性
-	if name, err := conn.GetProperty("name"); err == nil {
-		fmt.Println("Name = ", name)
+	if serviceType, err := conn.GetProperty("ServiceType"); err == nil {
+		temp := fmt.Sprintf("%s:%s", cache.TCPConnServiceType, serviceType)
+
+		// 在redis中 自减连接类型与连接数
+		// tcp_conn:service_type:TCP_SCM
+		if err = cache.RedisClient.Decr(temp).Err(); err != nil {
+			fmt.Println("remove ServiceType err", err)
+		}
 	}
 
 }
