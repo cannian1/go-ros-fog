@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"go-ros-fog/conf"
+	"go-ros-fog/model"
 	"go-ros-fog/server"
 	"go-ros-fog/ziface"
 	"go-ros-fog/znet"
@@ -20,6 +21,9 @@ func (pr *PingRouter) Handle(request ziface.IRequest) {
 	// 先读取客户端的数据，再回写 Ping...Ping...Ping...
 	fmt.Println("recv from client: msgID = ", request.GetMsgID(),
 		", data = ", string(request.GetData()))
+	s:=model.Sensors{}
+	s.Unmarshal(request.GetData())
+	fmt.Println(s)
 	err := request.GetConnection().SendMsg(200, []byte("Ping...Ping...Ping..."))
 	if err != nil {
 		fmt.Println(err)
@@ -32,7 +36,8 @@ func main() {
 
 	// 创建server句柄，使用 tinyZinx api
 	s := znet.NewServer()
-	s.AddRouter(0, &PingRouter{})
+	// 一定要记得注册路由时保证接收和客户端传来的msgID相同，否则会panic
+	s.AddRouter(1, &PingRouter{})
 	go s.Serve()
 	// 装载路由
 	r := server.NewRouter()
