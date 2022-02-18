@@ -164,7 +164,7 @@ func (c *Connection) Stop() {
 	fmt.Println("Conn Stop().. ConnID = ", c.ConnID)
 
 	// 如果当前连接已经关闭
-	if c.isClosed == true {
+	if c.isClosed{
 		return
 	}
 	c.isClosed = true
