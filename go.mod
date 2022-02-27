@@ -3,6 +3,7 @@ module go-ros-fog
 go 1.16
 
 require (
+	github.com/aler9/goroslib v0.0.0-20211221222622-8194cab3d17b
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-contrib/sessions v0.0.3
 	github.com/gin-gonic/gin v1.7.1
