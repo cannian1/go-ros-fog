@@ -12,6 +12,8 @@ const (
 	TCPConnServiceType = "tcp_conn:service_type"
 	// 每小时排行
 	TemperatureHourlyRankKey = "temp_rank:hourly"
+	// 传感器采集数据值
+	SensorValue = "tcp_conn:sensor_value"
 )
 
 // TemperatureSensorKey 传感器 TCP 传输来的温度

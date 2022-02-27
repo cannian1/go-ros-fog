@@ -48,11 +48,23 @@ func DoConnectionLost(conn ziface.IConnection) {
 	// 从设备管理器删除设备对象
 	tcp_core.EDMgrObj.Remove(id)
 
+	// 释放 redis 保存该连接的内容,释放后再取只能取到空切片
+	result, err := cache.RedisClient.HKeys(cache.SensorValue).Result()
+	if err != nil {
+		fmt.Println("Get conn_lost hkeys fail ", err)
+	}
+
+	err = cache.RedisClient.HDel(cache.SensorValue, result...).Err()
+	if err != nil {
+		fmt.Println("remove SensorValue err", err)
+	}
+
 	// 在redis中自减连接数
-	err := cache.RedisClient.Decr(cache.TCPConnCount).Err()
+	err = cache.RedisClient.Decr(cache.TCPConnCount).Err()
 	if err != nil {
 		fmt.Println("remove TCPConnCount err", err)
 	}
+
 }
 
 // TinyZinxServer 提供TCP长连接服务
