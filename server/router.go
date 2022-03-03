@@ -34,9 +34,15 @@ func NewRouter() *gin.Engine {
 		v1.GET("ros/topic_list/publisher", api.RosTopicPubs)
 		v1.GET("ros/topic_list/history", api.RosTopicListHistory)
 
+		// 获取 rosnode list
 		v1.GET("ros/node/list", api.RosNodeList)
+		// 获取 rosnode machines
 		v1.GET("ros/node/machines", api.RosNodeMachines)
+		// 获取 rosservice list
 		v1.GET("ros/services", api.RosServiceList)
+
+		// 获取传感器的值
+		v1.GET("tcp/sensors/:id",api.SensorValue)
 
 		// 需要登录保护的
 		auth := v1.Group("")
