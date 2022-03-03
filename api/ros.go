@@ -35,16 +35,22 @@ func RosTopicListHistory(c *gin.Context) {
 }
 
 // RosMachines 列出当前所有连接到ROS Master的机器地址
-func RosMachines(c *gin.Context) {
-
+func RosNodeMachines(c *gin.Context) {
+	service := service.RosNodeAndServiceEnv{}
+	res := service.ListMachines()
+	c.JSON(200, res)
 }
 
 // RosNodeList 列出所有ros节点
 func RosNodeList(c *gin.Context) {
-
+	service := service.RosNodeAndServiceEnv{}
+	res := service.ListNodes()
+	c.JSON(200, res)
 }
 
 // RosServiceList 列出所有ros服务
 func RosServiceList(c *gin.Context) {
-
+	service := service.RosNodeAndServiceEnv{}
+	res := service.ListServices()
+	c.JSON(200, res)
 }

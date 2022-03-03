@@ -32,10 +32,10 @@ func NewRouter() *gin.Engine {
 		v1.GET("ros/topic_list/alive", api.RosTopicList)
 		v1.GET("ros/topic_list/subscriber", api.RosTopicSubs)
 		v1.GET("ros/topic_list/publisher", api.RosTopicPubs)
-		v1.GET("ros/topic_list/history",api.RosTopicListHistory)
+		v1.GET("ros/topic_list/history", api.RosTopicListHistory)
 
-		v1.GET("ros/nodes", api.RosNodeList)
-		v1.GET("ros/machines", api.RosMachines)
+		v1.GET("ros/node/list", api.RosNodeList)
+		v1.GET("ros/node/machines", api.RosNodeMachines)
 		v1.GET("ros/services", api.RosServiceList)
 
 		// 需要登录保护的
