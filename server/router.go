@@ -28,6 +28,9 @@ func NewRouter() *gin.Engine {
 		// 用户登录
 		v1.POST("user/login", api.UserLogin)
 
+		// 获取rostopic list
+		v1.GET("ros/topic_list",api.RosTopicList)
+
 		// 需要登录保护的
 		auth := v1.Group("")
 		auth.Use(middleware.AuthRequired())
