@@ -9,14 +9,14 @@ import (
 	"github.com/aler9/goroslib"
 )
 
-const ROS_MASTER_ADDRESS = "192.168.0.143:11311"
+const ROS_MASTER_ADDRESS = "192.168.0.101:11311"
 
 // ROSNode 声明一个 ROS 节点句柄
 var rosNode *goroslib.Node
 
 func init() {
 	n, err := goroslib.NewNode(goroslib.NodeConf{
-		Name:          "goroslib_2",
+		Name:          "goroslib_0",
 		MasterAddress: ROS_MASTER_ADDRESS,
 	})
 

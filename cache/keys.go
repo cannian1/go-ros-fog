@@ -14,6 +14,8 @@ const (
 	TemperatureHourlyRankKey = "temp_rank:hourly"
 	// 传感器采集数据值
 	SensorValue = "tcp_conn:sensor_value"
+	// 传感器阈值
+	SensorThreshold = "sensor_threshold"
 )
 
 // TemperatureSensorKey 传感器 TCP 传输来的温度

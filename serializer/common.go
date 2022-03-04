@@ -29,8 +29,11 @@ const (
 	CodeDBError = 50001
 	// CodeEncryptError 加密失败
 	CodeEncryptError = 50002
-	//CodeParamErr 各种奇奇怪怪的参数错误
+	// CodeRedisDBErr Redis 数据库操作失败
+	CodeRedisDBErr = 50003
+	// CodeParamErr 各种奇奇怪怪的参数错误
 	CodeParamErr = 40001
+	
 )
 
 // CheckLogin 检查登录

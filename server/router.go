@@ -42,7 +42,9 @@ func NewRouter() *gin.Engine {
 		v1.GET("ros/services", api.RosServiceList)
 
 		// 获取传感器的值
-		v1.GET("tcp/sensors/:id",api.SensorValue)
+		v1.GET("tcp_sensors/get_value/:id", api.SensorValue)
+		// 设置传感器阈值
+		v1.POST("tcp_sensors/set_threshold/:id", api.SetSensorThreshold)
 
 		// 需要登录保护的
 		auth := v1.Group("")
