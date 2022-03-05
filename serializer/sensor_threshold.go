@@ -8,21 +8,21 @@ import (
 type SensorThreshold struct {
 	EquipmentID    uint32  `json:"equipment_id"`
 	Temperature    float32 `json:"temperature"`
-	LightIntensity int32   `json:"light_intensity"`
-	Smog           int32   `json:"smog"`
+	LightIntensity uint32  `json:"light_intensity"`
+	Smog           uint32  `json:"smog"`
 }
 
 // 序列化redis查出的map
 func BuildSensorThresholdByRedis(result map[string]string) SensorThreshold {
 	equipmentID, _ := strconv.Atoi(result["equipment_id"])
-	temperature, _ := strconv.Atoi(result["temperature"])
-	light_intensity, _ := strconv.Atoi(result["light_intensity"])
-	smog, _ := strconv.Atoi(result["smog"])
+	temperature, _ := strconv.ParseFloat(result["temperature"], 32)
+	light_intensity, _ := strconv.ParseUint(result["light_intensity"], 10, 32)
+	smog, _ := strconv.ParseUint(result["smog"], 10, 32)
 	return SensorThreshold{
 		EquipmentID:    uint32(equipmentID),
 		Temperature:    float32(temperature),
-		LightIntensity: int32(light_intensity),
-		Smog:           int32(smog),
+		LightIntensity: uint32(light_intensity),
+		Smog:           uint32(smog),
 	}
 }
 

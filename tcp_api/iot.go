@@ -8,6 +8,7 @@ import (
 	"go-ros-fog/ziface"
 	"go-ros-fog/znet"
 	"reflect"
+	"strconv"
 )
 
 type DealWithIoTData struct {
@@ -36,10 +37,6 @@ func (dwid *DealWithIoTData) Handle(request ziface.IRequest) {
 		sensorMap[ptrToTypeElemSe.Field(i).Name] = ptrToValueElemSe.Field(i).Interface()
 	}
 
-	// for k, v := range sensorMap {
-	// 	fmt.Println(k, reflect.TypeOf(v))
-	// }
-
 	// 存到 redis 数据库，方便跨语言共享
 	err := cache.RedisClient.HMSet(cache.SensorValue, sensorMap).Err()
 	if err != nil {
@@ -52,17 +49,27 @@ func (dwid *DealWithIoTData) Handle(request ziface.IRequest) {
 	// TODO: 越界报警与自动处置
 	// TODO: 可视化
 
+	//cache.SensorThreshold
+	thresholdMap, err := cache.RedisClient.HGetAll(cache.SensorThreshold + "1").Result()
+	if err != nil {
+		panic(err)
+	}
+	// equipmentID, _ := strconv.Atoi(thresholdMap["equipment_id"])
+	temperature, _ := strconv.ParseFloat(thresholdMap["temperature"], 32)
+	light_intensity, _ := strconv.ParseUint(thresholdMap["light_intensity"], 10, 32)
+	smog, _ := strconv.ParseUint(thresholdMap["smog"], 10, 32)
+
 	switch {
-	case t.Temperature > 50:
-		fmt.Println(t.Temperature, "温度超标了")
+	case t.Temperature > float32(temperature) && temperature != 0:
+		fmt.Println(t.Temperature, "温度超标了", "threshold:", temperature)
 		resMsg.Temperature = true
 		fallthrough
-	case t.LightLevel > 50:
-		fmt.Println(t.LightLevel, "光强超标了")
+	case t.LightLevel > uint32(light_intensity) && light_intensity != 0:
+		fmt.Println(t.LightLevel, "光强超标了", "threshold:", uint32(light_intensity))
 		resMsg.LightLevel = true
 		fallthrough
-	case t.Smog > 50:
-		fmt.Println(t.Smog, "粉尘浓度超标")
+	case t.Smog > uint32(smog) && smog != 0:
+		fmt.Println(t.Smog, "粉尘浓度超标", "threshold:", uint32(smog))
 		resMsg.Smog = true
 		err := request.GetConnection().SendMsg(15001, resMsg.Marshal())
 		if err != nil {
