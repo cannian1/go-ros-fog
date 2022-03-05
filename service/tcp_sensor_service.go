@@ -87,6 +87,7 @@ func (service *TcpSensorService) SetSensorThreshold(id string, body []byte) seri
 	err := model.DB.Save(&sensorThreshold).Error
 	if err != nil {
 		// 数据库还没建表
+		// 自动迁移是在启动程序的时候进行的，运行后再删表就会在这里报错
 		createErr := model.DB.Create(&sensorThreshold).Error
 		if createErr != nil {
 			return serializer.Response{
@@ -102,4 +103,38 @@ func (service *TcpSensorService) SetSensorThreshold(id string, body []byte) seri
 	}
 }
 
-// TODO: 登陆以后先查redis，为空就去mysql里查，写入redis
+//  登陆以后先查redis，为空就去mysql里查，由前端处理写入redis
+func (service *TcpSensorService) GetSensorThreshold(id string) serializer.Response {
+
+	id = "1"
+	result, err := cache.RedisClient.HGetAll(cache.SensorThreshold + id).Result()
+	if err != nil {
+		return serializer.Response{
+			Code:  50003,
+			Msg:   "Redis 连接失败",
+			Error: err.Error(),
+		}
+	}
+
+	if len(result) > 0 {
+		return serializer.Response{
+			Data: serializer.BuildSensorThresholdByRedis(result),
+		}
+	}
+
+	db_primary, _ := strconv.Atoi(id)
+	var sensorThreshold model.SensorsThreshold
+	sensorThreshold.EquipmentID = uint32(db_primary)
+	dbErr := model.DB.First(&sensorThreshold, db_primary).Error
+	if dbErr != nil {
+		return serializer.Response{
+			Code:  404,
+			Msg:   "数据库无数据,请先设置值",
+			Error: dbErr.Error(),
+		}
+	}
+	return serializer.Response{
+		Data: serializer.BuildSensorThresholdByDB(sensorThreshold),
+	}
+
+}

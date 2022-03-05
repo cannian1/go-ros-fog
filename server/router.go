@@ -44,7 +44,9 @@ func NewRouter() *gin.Engine {
 		// 获取传感器的值
 		v1.GET("tcp_sensors/get_value/:id", api.SensorValue)
 		// 设置传感器阈值
-		v1.POST("tcp_sensors/set_threshold/:id", api.SetSensorThreshold)
+		v1.POST("tcp_sensors/threshold/:id", api.SetSensorThreshold)
+		// 获取传感器阈值
+		v1.GET("tcp_sensors/threshold/:id",api.GetSensorThreshold)
 
 		// 需要登录保护的
 		auth := v1.Group("")
