@@ -9,7 +9,7 @@ import (
 	"github.com/aler9/goroslib"
 )
 
-const ROS_MASTER_ADDRESS = "192.168.0.103:11311"
+const ROS_MASTER_ADDRESS = "192.168.0.102:11311"
 
 // ROSNode 声明一个 ROS 节点句柄
 var rosNode *goroslib.Node

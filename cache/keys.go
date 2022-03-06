@@ -16,6 +16,16 @@ const (
 	SensorValue = "tcp_conn:sensor_value"
 	// 传感器阈值
 	SensorThreshold = "sensor_threshold"
+	// ros话题 chatter
+	RosTopicCharrter = "rostopic:chatter"
+	// ros话题 amcl_pose
+	RosTopicAmclPose = "rostopic:amcl_pose"
+	// ros话题 PowerVoltage
+	RosTopicPowerVoltage = "rostopic:PowerVoltage"
+	// ros话题 move_base_simple/goal
+	RosTopicMoveBaseGoal = "rostopic:move_base_simple/goal"
+	// ros话题 Odom
+	RosTopicOdom = "rostopic:odom"
 )
 
 // TemperatureSensorKey 传感器 TCP 传输来的温度

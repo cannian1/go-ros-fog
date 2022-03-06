@@ -22,7 +22,7 @@ func NewRouter() *gin.Engine {
 	{
 		v1.POST("ping", api.Ping)
 
-		// 用户登录
+		// 用户注册
 		v1.POST("user/register", api.UserRegister)
 
 		// 用户登录
@@ -46,7 +46,17 @@ func NewRouter() *gin.Engine {
 		// 设置传感器阈值
 		v1.POST("tcp_sensors/threshold/:id", api.SetSensorThreshold)
 		// 获取传感器阈值
-		v1.GET("tcp_sensors/threshold/:id",api.GetSensorThreshold)
+		v1.GET("tcp_sensors/threshold/:id", api.GetSensorThreshold)
+		// 获取 Chatter 话题数据
+		v1.GET("ros/topic_recv/chatter",api.RosTopicRecvChatter)
+		// 获取 电压 话题数据
+		v1.GET("ros/topic_recv/voltage",api.RosTopicRecvVoltage)
+		// 获取 odom 里程计 话题数据
+		v1.GET("ros/topic_recv/odom",api.RosTopicRecvOdom)
+		// 获取 amcl_pose 话题数据
+		v1.GET("ros/topic_recv/amcl",api.RosTopicRecvAmcl)
+		// TODO:获取 move_base_simple/goal 话题数据
+		v1.GET("ros/topic_recv/goal",api.RosTopicRecvGoal)
 
 		// 需要登录保护的
 		auth := v1.Group("")

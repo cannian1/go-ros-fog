@@ -2,6 +2,7 @@ package main
 
 import (
 	"go-ros-fog/conf"
+	"go-ros-fog/ros"
 	"go-ros-fog/tcp_main"
 
 	"go-ros-fog/server"
@@ -12,7 +13,7 @@ func main() {
 	conf.Init()
 
 	tcp_main.TinyZinxServer()
-	//ros.TopicServer()
+	go ros.TopicServer()
 
 	// 装载路由
 	r := server.NewRouter()
