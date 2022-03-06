@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"go-ros-fog/cache"
 	"go-ros-fog/ros_model"
+	"strconv"
 	"time"
 
 	"github.com/aler9/goroslib"
@@ -102,12 +103,34 @@ func (bn *BusinessNode) InitPublisher() {
 		select {
 		// publish a message every second
 		case <-r.SleepChan():
+			temp, err1 := cache.RedisClient.HGet(cache.SensorValue, "Temperature").Result()
+			if err1 != nil {
+				fmt.Println(err1)
+			}
+			light, err2 := cache.RedisClient.HGet(cache.SensorValue, "LightLevel").Result()
+			if err2 != nil {
+				fmt.Println(err2)
+			}
+			smog, err3 := cache.RedisClient.HGet(cache.SensorValue, "Smog").Result()
+			if err3 != nil {
+				fmt.Println(err3)
+			}
+			time, err4 := cache.RedisClient.HGet(cache.SensorValue, "Time").Result()
+			if err4 != nil {
+				fmt.Println(err4)
+			}
+
+			ttemp, _ := strconv.ParseFloat(temp, 32)
+			tlight, _ := strconv.ParseUint(light, 10, 32)
+			tsmog, _ := strconv.ParseUint(smog, 10, 32)
+			ttime, _ := strconv.ParseInt(time, 10, 64)
+
 			msg := &ros_model.Sensors{
 				DeviceId:    1,
-				Temperature: 30,
-				LightLevel:  26,
-				Smog:        47,
-				Time:        time.Now().UnixNano(),
+				Temperature: float32(ttemp),
+				LightLevel:  uint32(tlight),
+				Smog:        uint32(tsmog),
+				Time:        ttime,
 			}
 			fmt.Printf("Outgoing: %+v\n", msg)
 			pub.Write(msg)
