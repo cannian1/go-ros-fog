@@ -58,6 +58,8 @@ func NewRouter() *gin.Engine {
 		// 获取 move_base_simple/goal 话题数据
 		v1.GET("ros/topic_recv/goal",api.RosTopicRecvGoal)
 
+		v1.GET("tcp_sensors/out_of_border",api.GetOutOfBorderNow)
+		v1.GET("tcp_sensors/out_of_border/last7days",api.GetOutOfBorderLast7Days)
 		// 将缓存中的越界时长统计数据刷到数据库(断电/关机前手动保存数据)
 		v1.PUT("tcp_sensors/out_of_border",api.DataFlush2DB)
 		// 删除越界统计数据

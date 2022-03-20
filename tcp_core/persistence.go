@@ -44,7 +44,7 @@ func Save2DB() {
 
 	key, _ := strconv.Atoi(cache.GetDateKey())
 	oob := model.OOB{
-		Date:                    key,
+		Date:                    key, //
 		TemperatureAbnormalTime: t,
 		LightLevelAbnormalTime:  l,
 		SmogAbnormalTime:        s,

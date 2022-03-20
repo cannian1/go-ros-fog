@@ -67,3 +67,59 @@ func (service *TcpSensorAbnormalTimeService) Flush2DB() serializer.Response {
 		Msg:  "ok",
 	}
 }
+
+func (service *TcpSensorAbnormalTimeService) GetOutOfBorderNow() serializer.Response {
+	temp, err := cache.RedisClient.Get(cache.GetDateKey() + ":" + cache.TemperatureAbnormalTime).Result()
+	if err != nil {
+		return serializer.Response{
+			Code:  200,
+			Msg:   "Redis 暂无越界数据",
+			Error: err.Error(),
+		}
+	}
+
+	light, err := cache.RedisClient.Get(cache.GetDateKey() + ":" + cache.LightAbnormalTime).Result()
+	if err != nil {
+		return serializer.Response{
+			Code:  200,
+			Msg:   "Redis 暂无越界数据",
+			Error: err.Error(),
+		}
+	}
+
+	smog, err := cache.RedisClient.Get(cache.GetDateKey() + ":" + cache.SmogAbnormalTime).Result()
+	if err != nil {
+		return serializer.Response{
+			Code:  200,
+			Msg:   "Redis 暂无越界数据",
+			Error: err.Error(),
+		}
+	}
+
+	if len(temp) > 0 || len(light) > 0 || len(smog) > 0 {
+		return serializer.Response{
+			Data: serializer.BuildOutOfBorderNow(temp, light, smog),
+		}
+	}
+	return serializer.Response{
+		Code: 200,
+		Msg:  "",
+	}
+}
+
+func (service *TcpSensorAbnormalTimeService) GetOutOfBorderLast7Days() serializer.Response {
+	var oobs []model.OOB
+
+	err := model.DB.Where("date > ? - 7 ", cache.GetDateKey()).Find(&oobs).Error
+	if err != nil {
+		return serializer.Response{
+			Code:  50000,
+			Msg:   "数据库连接错误",
+			Error: err.Error(),
+		}
+	}
+
+	return serializer.Response{
+		Data: serializer.BuildOutOfBorderLast7Days(oobs),
+	}
+}
