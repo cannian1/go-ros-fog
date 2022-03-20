@@ -3,6 +3,7 @@ package cache
 import (
 	"fmt"
 	"strconv"
+	"time"
 )
 
 const (
@@ -26,6 +27,14 @@ const (
 	RosTopicMoveBaseGoal = "rostopic:move_base_simple/goal"
 	// ros话题 Odom
 	RosTopicOdom = "rostopic:odom"
+
+	AbnormalTime = "abnormal_time"
+
+	TemperatureAbnormalTime = "temperature_abnormal_time"
+
+	SmogAbnormalTime = "smog_abnormal_time"
+
+	LightAbnormalTime = "light_abnormal_time"
 )
 
 // TemperatureSensorKey 传感器 TCP 传输来的温度
@@ -33,4 +42,9 @@ const (
 // sensor:temperature:2 -> 30
 func TemperatureSensorKey(id uint) string {
 	return fmt.Sprintf("sensor:temperature:%s", strconv.Itoa(int(id)))
+}
+
+// GetDateKey 返回当前日期作为 Key
+func GetDateKey() string {
+	return time.Now().Format("20060102")
 }

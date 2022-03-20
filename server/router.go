@@ -55,8 +55,10 @@ func NewRouter() *gin.Engine {
 		v1.GET("ros/topic_recv/odom",api.RosTopicRecvOdom)
 		// 获取 amcl_pose 话题数据
 		v1.GET("ros/topic_recv/amcl",api.RosTopicRecvAmcl)
-		// TODO:获取 move_base_simple/goal 话题数据
+		// 获取 move_base_simple/goal 话题数据
 		v1.GET("ros/topic_recv/goal",api.RosTopicRecvGoal)
+		// 删除越界统计数据
+		v1.DELETE("tcp_sensors/out_of_border/:id",api.DelOutOfBorder)
 
 		// 需要登录保护的
 		auth := v1.Group("")
@@ -65,6 +67,8 @@ func NewRouter() *gin.Engine {
 			// User Routing
 			auth.GET("user/me", api.UserMe)
 			auth.DELETE("user/logout", api.UserLogout)
+
+			// auth.DELETE("")
 		}
 	}
 	return r

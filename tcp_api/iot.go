@@ -59,27 +59,39 @@ func (dwid *DealWithIoTData) Handle(request ziface.IRequest) {
 	light_intensity, _ := strconv.ParseUint(thresholdMap["light_intensity"], 10, 32)
 	smog, _ := strconv.ParseUint(thresholdMap["smog"], 10, 32)
 
+	stateFlag := false
 	switch {
 	case t.Temperature > float32(temperature) && temperature != 0:
 		fmt.Println(t.Temperature, "温度超标了", "threshold:", temperature)
 		resMsg.Temperature = true
+		stateFlag = true
+		tcp_core.StasticalOutOfThreshold(cache.TemperatureAbnormalTime)
 		fallthrough
 	case t.LightLevel > uint32(light_intensity) && light_intensity != 0:
 		fmt.Println(t.LightLevel, "光强超标了", "threshold:", uint32(light_intensity))
 		resMsg.LightLevel = true
+		stateFlag = true
+		tcp_core.StasticalOutOfThreshold(cache.LightAbnormalTime)
 		fallthrough
 	case t.Smog > uint32(smog) && smog != 0:
 		fmt.Println(t.Smog, "粉尘浓度超标", "threshold:", uint32(smog))
 		resMsg.Smog = true
+		stateFlag = true
+		tcp_core.StasticalOutOfThreshold(cache.SmogAbnormalTime)
 		err := request.GetConnection().SendMsg(15001, resMsg.Marshal())
 		if err != nil {
 			fmt.Println(err)
 		}
+
 	default:
 		fmt.Println("一切正常", t)
 		err := request.GetConnection().SendMsg(15000, nil)
 		if err != nil {
 			fmt.Println(err)
 		}
+	}
+
+	if stateFlag {
+		tcp_core.StasticalOutOfThreshold(cache.AbnormalTime)
 	}
 }
