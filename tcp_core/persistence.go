@@ -52,7 +52,10 @@ func Save2DB() {
 
 	err := model.DB.Create(&oob).Error
 	if err != nil {
-		panic("[fatal err]" + err.Error())
+		err = model.DB.Save(&oob).Error
+		if err != nil {
+			panic("[Fatal err]" + err.Error())
+		}
 	}
 
 }

@@ -6,7 +6,6 @@ import "time"
 func SetTickerEveryDay(f func()) {
 	go func() {
 		for {
-			// f()
 			now := time.Now()
 			// 计算下一个零点
 			next := now.Add(time.Hour * 24)
