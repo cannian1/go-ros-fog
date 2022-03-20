@@ -33,9 +33,8 @@ func ClearDailyCache() {
 	}
 }
 
+// Save2DB 从redis中读出越界时长存入数据库中
 func Save2DB() {
-	defer ClearDailyCache()
-
 	temp, _ := cache.RedisClient.Get(cache.GetDateKey() + ":" + cache.TemperatureAbnormalTime).Result()
 	light, _ := cache.RedisClient.Get(cache.GetDateKey() + ":" + cache.LightAbnormalTime).Result()
 	smog, _ := cache.RedisClient.Get(cache.GetDateKey() + ":" + cache.SmogAbnormalTime).Result()
@@ -56,4 +55,10 @@ func Save2DB() {
 		panic("[fatal err]" + err.Error())
 	}
 
+}
+
+// Save2DBAndPurge 从redis中读出越界时长存入数据库中 并释放缓存
+func Save2DBAndPurge() {
+	Save2DB()
+	ClearDailyCache()
 }
