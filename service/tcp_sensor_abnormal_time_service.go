@@ -36,8 +36,8 @@ func (service *TcpSensorAbnormalTimeService) DelHistoryData(hitherto string) ser
 
 func (service *TcpSensorAbnormalTimeService) Flush2DB() serializer.Response {
 	temp, _ := cache.RedisClient.Get(cache.GetDateKey() + ":" + cache.TemperatureAbnormalTime).Result()
-	light, _ := cache.RedisClient.Get(cache.GetDateKey() + ":" + cache.LightAbnormalTime).Result()
-	smog, _ := cache.RedisClient.Get(cache.GetDateKey() + ":" + cache.SmogAbnormalTime).Result()
+	light, _ := cache.RedisClient.Get(cache.GetDateKey() + ":" + cache.No2AbnormalTime).Result()
+	smog, _ := cache.RedisClient.Get(cache.GetDateKey() + ":" + cache.CoAbnormalTime).Result()
 	t, _ := strconv.Atoi(temp)
 	l, _ := strconv.Atoi(light)
 	s, _ := strconv.Atoi(smog)
@@ -46,8 +46,8 @@ func (service *TcpSensorAbnormalTimeService) Flush2DB() serializer.Response {
 	oob := model.OOB{
 		Date:                    key,
 		TemperatureAbnormalTime: t,
-		LightLevelAbnormalTime:  l,
-		SmogAbnormalTime:        s,
+		No2AbnormalTime:         l,
+		CoAbnormalTime:          s,
 	}
 
 	dbErr := model.DB.Create(&oob).Error
@@ -78,7 +78,7 @@ func (service *TcpSensorAbnormalTimeService) GetOutOfBorderNow() serializer.Resp
 		}
 	}
 
-	light, err := cache.RedisClient.Get(cache.GetDateKey() + ":" + cache.LightAbnormalTime).Result()
+	light, err := cache.RedisClient.Get(cache.GetDateKey() + ":" + cache.No2AbnormalTime).Result()
 	if err != nil {
 		return serializer.Response{
 			Code:  200,
@@ -87,7 +87,7 @@ func (service *TcpSensorAbnormalTimeService) GetOutOfBorderNow() serializer.Resp
 		}
 	}
 
-	smog, err := cache.RedisClient.Get(cache.GetDateKey() + ":" + cache.SmogAbnormalTime).Result()
+	smog, err := cache.RedisClient.Get(cache.GetDateKey() + ":" + cache.CoAbnormalTime).Result()
 	if err != nil {
 		return serializer.Response{
 			Code:  200,

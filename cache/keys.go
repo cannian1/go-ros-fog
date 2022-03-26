@@ -32,9 +32,9 @@ const (
 
 	TemperatureAbnormalTime = "temperature_abnormal_time"
 
-	SmogAbnormalTime = "smog_abnormal_time"
+	No2AbnormalTime = "no2_abnormal_time"
 
-	LightAbnormalTime = "light_abnormal_time"
+	CoAbnormalTime = "co_abnormal_time"
 )
 
 // TemperatureSensorKey 传感器 TCP 传输来的温度

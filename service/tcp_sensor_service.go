@@ -60,8 +60,8 @@ func (service *TcpSensorService) SetSensorThreshold(id string, body []byte) seri
 	redisSave := make(map[string]interface{})
 	redisSave["equipment_id"] = id
 	redisSave["temperature"] = recv["temperature"]
-	redisSave["light_intensity"] = recv["light_intensity"]
-	redisSave["smog"] = recv["smog"]
+	redisSave["no_2"] = recv["no_2"]
+	redisSave["co"] = recv["co"]
 
 	// 存入redis
 	redisErr := cache.RedisClient.HMSet(cache.SensorThreshold+id, redisSave).Err()

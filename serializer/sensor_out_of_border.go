@@ -10,8 +10,8 @@ import (
 type SensorsOutOfBorder struct {
 	Date                    int `json:"date" gorm:"primaryKey;autoIncrement:false"`
 	TemperatureAbnormalTime int `json:"temperature_at"`
-	LightLevelAbnormalTime  int `json:"lightlevel_at"`
-	SmogAbnormalTime        int `json:"smog_at"`
+	No2AbnormalTime         int `json:"no2_at"`
+	CoAbnormalTime          int `json:"co_at"`
 }
 
 func BuildOutOfBorderNow(temp, light, smog string) SensorsOutOfBorder {
@@ -23,8 +23,8 @@ func BuildOutOfBorderNow(temp, light, smog string) SensorsOutOfBorder {
 	return SensorsOutOfBorder{
 		Date:                    d,
 		TemperatureAbnormalTime: t,
-		LightLevelAbnormalTime:  l,
-		SmogAbnormalTime:        s,
+		No2AbnormalTime:         l,
+		CoAbnormalTime:          s,
 	}
 
 }
@@ -34,8 +34,8 @@ func BuildSensorsOutOfBorder7(item model.OOB) SensorsOutOfBorder {
 	return SensorsOutOfBorder{
 		Date:                    item.Date,
 		TemperatureAbnormalTime: item.TemperatureAbnormalTime,
-		LightLevelAbnormalTime:  item.LightLevelAbnormalTime,
-		SmogAbnormalTime:        item.SmogAbnormalTime,
+		No2AbnormalTime:         item.No2AbnormalTime,
+		CoAbnormalTime:          item.CoAbnormalTime,
 	}
 }
 

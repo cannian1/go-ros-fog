@@ -73,13 +73,13 @@ func (dwid *DealWithIoTData) Handle(request ziface.IRequest) {
 		fmt.Println(t.No2, "No2超标了", "threshold:", no2)
 		resMsg.LightLevel = true
 		stateFlag = true
-		tcp_core.StasticalOutOfThreshold(cache.LightAbnormalTime)
+		tcp_core.StasticalOutOfThreshold(cache.No2AbnormalTime)
 		fallthrough
 	case t.Co > float32(co) && co != 0:
 		fmt.Println(t.Co, "Co浓度超标", "threshold:", co)
 		resMsg.Smog = true
 		stateFlag = true
-		tcp_core.StasticalOutOfThreshold(cache.SmogAbnormalTime)
+		tcp_core.StasticalOutOfThreshold(cache.CoAbnormalTime)
 		err := request.GetConnection().SendMsg(15001, resMsg.Marshal())
 		if err != nil {
 			fmt.Println(err)

@@ -20,12 +20,12 @@ func ClearDailyCache() {
 		panic(err.Error() + "清除温度每日异常时长缓存失败")
 	}
 
-	if err := cache.RedisClient.Del(cache.GetDateKey() + ":" + cache.LightAbnormalTime).Err(); err != nil {
-		panic(err.Error() + "清除光强每日异常时长缓存失败")
+	if err := cache.RedisClient.Del(cache.GetDateKey() + ":" + cache.No2AbnormalTime).Err(); err != nil {
+		panic(err.Error() + "清除No2每日异常时长缓存失败")
 	}
 
-	if err := cache.RedisClient.Del(cache.GetDateKey() + ":" + cache.SmogAbnormalTime).Err(); err != nil {
-		panic(err.Error() + "清除烟雾每日异常时长缓存失败")
+	if err := cache.RedisClient.Del(cache.GetDateKey() + ":" + cache.CoAbnormalTime).Err(); err != nil {
+		panic(err.Error() + "清除CO每日异常时长缓存失败")
 	}
 
 	if err := cache.RedisClient.Del(cache.GetDateKey() + ":" + cache.AbnormalTime).Err(); err != nil {
@@ -36,8 +36,8 @@ func ClearDailyCache() {
 // Save2DB 从redis中读出越界时长存入数据库中
 func Save2DB() {
 	temp, _ := cache.RedisClient.Get(cache.GetDateKey() + ":" + cache.TemperatureAbnormalTime).Result()
-	light, _ := cache.RedisClient.Get(cache.GetDateKey() + ":" + cache.LightAbnormalTime).Result()
-	smog, _ := cache.RedisClient.Get(cache.GetDateKey() + ":" + cache.SmogAbnormalTime).Result()
+	light, _ := cache.RedisClient.Get(cache.GetDateKey() + ":" + cache.No2AbnormalTime).Result()
+	smog, _ := cache.RedisClient.Get(cache.GetDateKey() + ":" + cache.CoAbnormalTime).Result()
 	t, _ := strconv.Atoi(temp)
 	l, _ := strconv.Atoi(light)
 	s, _ := strconv.Atoi(smog)
@@ -46,8 +46,8 @@ func Save2DB() {
 	oob := model.OOB{
 		Date:                    key, //
 		TemperatureAbnormalTime: t,
-		LightLevelAbnormalTime:  l,
-		SmogAbnormalTime:        s,
+		No2AbnormalTime:         l,
+		CoAbnormalTime:          s,
 	}
 
 	err := model.DB.Create(&oob).Error
