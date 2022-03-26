@@ -58,8 +58,8 @@ func (dwid *DealWithIoTData) Handle(request ziface.IRequest) {
 	}
 	// equipmentID, _ := strconv.Atoi(thresholdMap["equipment_id"])
 	temperature, _ := strconv.ParseFloat(thresholdMap["temperature"], 32)
-	no2, _ := strconv.ParseUint(thresholdMap["no2"], 10, 32)
-	co, _ := strconv.ParseUint(thresholdMap["co"], 10, 32)
+	no2, _ := strconv.ParseFloat(thresholdMap["no_2"], 32)
+	co, _ := strconv.ParseFloat(thresholdMap["co"], 32)
 
 	stateFlag := false
 	switch {
