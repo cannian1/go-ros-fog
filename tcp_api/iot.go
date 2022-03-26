@@ -38,7 +38,7 @@ func (dwid *DealWithIoTData) Handle(request ziface.IRequest) {
 	}
 
 	// fmt.Println(sensorMap)
-	
+
 	// 存到 redis 数据库，方便跨语言共享
 	err := cache.RedisClient.HMSet(cache.SensorValue, sensorMap).Err()
 	if err != nil {
@@ -76,7 +76,7 @@ func (dwid *DealWithIoTData) Handle(request ziface.IRequest) {
 		tcp_core.StasticalOutOfThreshold(cache.LightAbnormalTime)
 		fallthrough
 	case t.Co > float32(co) && co != 0:
-		fmt.Println(t.Co, "粉尘浓度超标", "threshold:", co)
+		fmt.Println(t.Co, "Co浓度超标", "threshold:", co)
 		resMsg.Smog = true
 		stateFlag = true
 		tcp_core.StasticalOutOfThreshold(cache.SmogAbnormalTime)
