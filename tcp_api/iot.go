@@ -37,6 +37,8 @@ func (dwid *DealWithIoTData) Handle(request ziface.IRequest) {
 		sensorMap[ptrToTypeElemSe.Field(i).Name] = ptrToValueElemSe.Field(i).Interface()
 	}
 
+	// fmt.Println(sensorMap)
+	
 	// 存到 redis 数据库，方便跨语言共享
 	err := cache.RedisClient.HMSet(cache.SensorValue, sensorMap).Err()
 	if err != nil {
@@ -56,8 +58,8 @@ func (dwid *DealWithIoTData) Handle(request ziface.IRequest) {
 	}
 	// equipmentID, _ := strconv.Atoi(thresholdMap["equipment_id"])
 	temperature, _ := strconv.ParseFloat(thresholdMap["temperature"], 32)
-	light_intensity, _ := strconv.ParseUint(thresholdMap["light_intensity"], 10, 32)
-	smog, _ := strconv.ParseUint(thresholdMap["smog"], 10, 32)
+	no2, _ := strconv.ParseUint(thresholdMap["no2"], 10, 32)
+	co, _ := strconv.ParseUint(thresholdMap["co"], 10, 32)
 
 	stateFlag := false
 	switch {
@@ -67,14 +69,14 @@ func (dwid *DealWithIoTData) Handle(request ziface.IRequest) {
 		stateFlag = true
 		tcp_core.StasticalOutOfThreshold(cache.TemperatureAbnormalTime)
 		fallthrough
-	case t.LightLevel > uint32(light_intensity) && light_intensity != 0:
-		fmt.Println(t.LightLevel, "光强超标了", "threshold:", uint32(light_intensity))
+	case t.No2 > float32(no2) && no2 != 0:
+		fmt.Println(t.No2, "No2超标了", "threshold:", no2)
 		resMsg.LightLevel = true
 		stateFlag = true
 		tcp_core.StasticalOutOfThreshold(cache.LightAbnormalTime)
 		fallthrough
-	case t.Smog > uint32(smog) && smog != 0:
-		fmt.Println(t.Smog, "粉尘浓度超标", "threshold:", uint32(smog))
+	case t.Co > float32(co) && co != 0:
+		fmt.Println(t.Co, "粉尘浓度超标", "threshold:", co)
 		resMsg.Smog = true
 		stateFlag = true
 		tcp_core.StasticalOutOfThreshold(cache.SmogAbnormalTime)

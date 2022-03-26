@@ -107,11 +107,11 @@ func (bn *BusinessNode) InitPublisher() {
 			if err1 != nil {
 				fmt.Println(err1)
 			}
-			light, err2 := cache.RedisClient.HGet(cache.SensorValue, "LightLevel").Result()
+			no2, err2 := cache.RedisClient.HGet(cache.SensorValue, "No2").Result()
 			if err2 != nil {
 				fmt.Println(err2)
 			}
-			smog, err3 := cache.RedisClient.HGet(cache.SensorValue, "Smog").Result()
+			co, err3 := cache.RedisClient.HGet(cache.SensorValue, "Co").Result()
 			if err3 != nil {
 				fmt.Println(err3)
 			}
@@ -121,15 +121,15 @@ func (bn *BusinessNode) InitPublisher() {
 			}
 
 			ttemp, _ := strconv.ParseFloat(temp, 32)
-			tlight, _ := strconv.ParseUint(light, 10, 32)
-			tsmog, _ := strconv.ParseUint(smog, 10, 32)
+			tno2, _ := strconv.ParseFloat(no2, 32)
+			tco, _ := strconv.ParseFloat(co, 32)
 			ttime, _ := strconv.ParseInt(time, 10, 64)
 
 			msg := &ros_model.Sensors{
 				DeviceId:    1,
 				Temperature: float32(ttemp),
-				LightLevel:  uint32(tlight),
-				Smog:        uint32(tsmog),
+				No2:         float32(tno2),
+				Co:          float32(tco),
 				Time:        ttime,
 			}
 			fmt.Printf("Outgoing: %+v\n", msg)

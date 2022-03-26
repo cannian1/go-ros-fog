@@ -7,10 +7,10 @@ import (
 )
 
 type Sensors struct {
-	msg.Package `ros:"custom_msg"`
+	msg.Package `ros:"custon_msg"`
 	DeviceId    uint32
 	Temperature float32
-	LightLevel  uint32
-	Smog        uint32
+	No2         float32
+	Co          float32
 	Time        int64
 }

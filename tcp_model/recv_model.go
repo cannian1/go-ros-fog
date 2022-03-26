@@ -14,8 +14,8 @@ type DeviceID struct {
 type Sensor struct {
 	DeviceID    uint32  `json:"device_id"`
 	Temperature float32 `json:"temperature"`
-	LightLevel  uint32  `json:"light_intensity"`
-	Smog        uint32  `json:"smog"`
+	No2         float32 `json:"no_2"`
+	Co          float32 `json:"co"`
 	Time        int64   `json:"time"`
 }
 
