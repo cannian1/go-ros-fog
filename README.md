@@ -1,6 +1,6 @@
 # go-ros-fog
 
-基于 Ubuntu18.04 ，ros melodic 版本的ros slave 结点
+基于 Ubuntu18.04 ，ros melodic 版本的ros node
 
 主要使用框架 
 
