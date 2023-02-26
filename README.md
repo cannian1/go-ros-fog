@@ -19,12 +19,6 @@ Zinx
 https://github.com/aceld/zinx 
 
 
-
-
-## 目的
-
-本项目采用了一系列Golang中比较流行的组件，可以以本项目为基础快速搭建Restful Web API
-
 ## 特色
 
 1.  ROS1 官方提供了 C++和 Python 编写的库，但是编译和运行环境超过 1GB，只能使用固定的编译工具。官方由于历史遗留问题，在 ROS1 中存在操作系统和语言倾向性，对 UBuntu 系统和 C++ 支持得最好（ ROSUDP 只有在 roscpp 中实现，rospy并不支持 ）。本项目可以交叉编译后在 Linux、Windows、MacOS 中运行，只需要 MySql 和 Redis 环境，并且编译出的可执行文件小。
